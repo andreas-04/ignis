@@ -1,0 +1,16 @@
+*.pem
+*.key
+*.crt
+*.db
+config.env
+.env
+**/node_modules/
+**/dist/
+**/storage/
+*.pyc
+*.toc
+*.log
+*.aux
+*.out
+*.snm
+*.nav

@@ -1,0 +1,81 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e293b', 'primaryTextColor': '#f1f5f9', 'primaryBorderColor': '#475569', 'lineColor': '#94a3b8', 'secondaryColor': '#0f172a', 'tertiaryColor': '#1e293b', 'background': '#0f172a', 'mainBkg': '#1e293b', 'nodeBorder': '#475569', 'clusterBkg': '#0f172a', 'clusterBorder': '#334155', 'titleColor': '#f1f5f9', 'edgeLabelBackground': '#1e293b', 'fontFamily': 'monospace'}}}%%
+graph TB
+    subgraph Clients["Client Layer"]
+        Browser["Web Browser"]
+        Mobile["Mobile Device"]
+    end
+
+    subgraph Docker["Docker Compose Environment"]
+        subgraph FrontendContainer["Frontend Container (nginx)"]
+            Nginx["Nginx Reverse Proxy<br/>Port 443 (HTTPS)"]
+            SPA["React SPA<br/>Static Assets"]
+            mTLS["mTLS Termination + CRL Check"]
+        end
+
+        subgraph BackendContainer["Backend Container (Flask)"]
+            Flask["Flask API Server<br/>Port 8443"]
+            subgraph AuthGroup["Auth & Permissions"]
+                Auth["JWT Auth Module<br/>core/auth.py"]
+                PermResolver["Permission Resolver<br/>core/permissions.py"]
+            end
+            subgraph DataGroup["Data & Files"]
+                FileOps["File Operations<br/>(CRUD + rename/move/preview)"]
+                UserMgmt["User & Group Management"]
+            end
+            subgraph CertGroup["Certificate Services"]
+                CertGen["Certificate Generator<br/>+ CRL Management<br/>utils/generate_certs.py"]
+                CertRevoke["Certificate Revocation<br/>Engine"]
+            end
+            subgraph UtilGroup["Utilities"]
+                EmailSvc["Email Service<br/>utils/email_sender.py"]
+                AuditLog["Audit Logger<br/>utils/audit.py"]
+                DockerAPI["Docker API Client<br/>(system logs)"]
+            end
+        end
+
+        subgraph Storage["Persistent Volumes"]
+            DB[("SQLite Database<br/>terracrate-db")]
+            Certs["TLS Certificates + CRL<br/>terracrate-certs"]
+            FileStore["File Storage<br/>(terracrate-storage/files/)"]
+        end
+    end
+
+    subgraph Host["Host Services"]
+        SMTP["SMTP Server<br/>(Email Delivery)"]
+        mDNS["Avahi / mDNS<br/>Service Discovery"]
+        DockerSock["Docker Socket<br/>/var/run/docker.sock"]
+    end
+
+    Browser -->|"HTTPS + mTLS"| Nginx
+    Mobile -->|"HTTPS + mTLS"| Nginx
+    Nginx --> SPA
+    Nginx -->|"Proxy /api/*<br/>+ SSL headers"| Flask
+    Nginx --- mTLS
+    Nginx --- Certs
+
+    Flask --- Auth
+    Flask --- PermResolver
+    Flask --- FileOps
+    Flask --- UserMgmt
+    Flask --- CertGen
+    Flask --- CertRevoke
+    Flask --- EmailSvc
+    Flask --- AuditLog
+    Flask --- DockerAPI
+
+    Auth -->|"Query/Update"| DB
+    UserMgmt -->|"CRUD"| DB
+    PermResolver -->|"Resolve tiers"| DB
+    AuditLog -->|"Write logs"| DB
+    CertRevoke -->|"Revocation records"| DB
+    FileOps -->|"Read/Write"| FileStore
+    CertGen -->|"Store/Load<br/>certs + CRL"| Certs
+    EmailSvc -->|"SMTP"| SMTP
+    DockerAPI -->|"Read-only"| DockerSock
+    Flask -.->|"Advertise"| mDNS
+
+    Storage ~~~ Host
+    classDef darkNode fill:#1e293b,stroke:#475569,color:#f1f5f9
+    classDef dbNode fill:#0f172a,stroke:#475569,color:#f1f5f9
+    class Browser,Mobile,Nginx,SPA,mTLS,Flask,Auth,PermResolver,FileOps,UserMgmt,CertGen,CertRevoke,EmailSvc,AuditLog,DockerAPI,Certs,FileStore,SMTP,mDNS,DockerSock darkNode
+    class DB dbNode

@@ -1,0 +1,265 @@
+%!TEX program = xelatex
+\documentclass{beamer}
+\usepackage[orientation=landscape,size=custom,width=101.6,height=76.2,scale=1]{beamerposter}
+
+% ---------- packages ----------
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage[absolute,overlay]{textpos}
+
+% ---------- font ----------
+\setmainfont{GeistMono}[
+  Extension      = .ttf,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-Italic,
+  BoldItalicFont = *-BoldItalic,
+  Path           = ./fonts/
+]
+\setsansfont{GeistMono}[
+  Extension      = .ttf,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-Italic,
+  Path           = ./fonts/
+]
+\setmonofont{GeistMono}[
+  Extension      = .ttf,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  Path           = ./fonts/
+]
+
+% ---------- beamer theme ----------
+\usetheme{default}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+
+% White background
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=black}
+
+% ---------- colours ----------
+\definecolor{uigold}{HTML}{061025}
+\definecolor{uiblack}{HTML}{696969}
+
+% ---------- kill beamer spacing ----------
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\topsep}{0pt}
+\linespread{0.82}
+
+% ---------- text position unit ----------
+\setlength{\TPHorizModule}{\paperwidth}
+\setlength{\TPVertModule}{\paperheight}
+
+% ---------- pill label command ----------
+% Usage: \pillhead{Label Text}
+\newcommand{\pillhead}[1]{%
+  \tikz[baseline=(n.base)]\node[
+    fill=uiblack,
+    rounded corners=20pt,
+    inner xsep=24pt,
+    inner ysep=12pt,
+  ](n){\textcolor{uigold}{\fontsize{42}{50}\selectfont\bfseries #1}};%
+}
+
+% ======================================================================
+\begin{document}
+\begin{frame}[t]
+
+% ---- dark header band ----
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[uiblack] (current page.north west)
+    rectangle ([yshift=-0.155\paperheight]current page.north east);
+\end{tikzpicture}
+
+% ---- gold column dividers ----
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[uigold, line width=3pt]
+    ([xshift=0.335\paperwidth, yshift=-0.155\paperheight]current page.north west)
+    -- ([xshift=0.335\paperwidth]current page.south west);
+  \draw[uigold, line width=3pt]
+    ([xshift=0.667\paperwidth, yshift=-0.155\paperheight]current page.north west)
+    -- ([xshift=0.667\paperwidth]current page.south west);
+\end{tikzpicture}
+
+% ---- top-left: EXPO logo ----
+\begin{textblock}{0.28}(0.02, 0.02)
+  \includegraphics[height=8cm]{expo.png}
+\end{textblock}
+
+% ---- top-right: UI Block I logo ----
+\begin{textblock}{0.10}(0.91, -0.01)
+  \includegraphics[height=11cm]{uiLogo.png}
+\end{textblock}
+
+% ---- bottom-right: College of Engineering logo ----
+\begin{textblock}{0.25}(0.91, 0.96)
+  \includegraphics[height=2.4cm]{UIcollegeOfEngLogo.png}
+\end{textblock}
+
+% ---- title ----
+\begin{textblock}{0.55}(0.25, 0.03)
+  {\fontsize{80}{88}\selectfont\bfseries\color{white} TerraCrate}
+\end{textblock}
+
+% ---- subtitle ----
+\begin{textblock}{0.65}(0.25, 0.075)
+  {\fontsize{36}{42}\selectfont\color{uigold} Secure, offline-first file storage for local networks}
+\end{textblock}
+
+% ---- authors ----
+\begin{textblock}{0.65}(0.25, 0.11)
+  {\fontsize{32}{38}\selectfont\color{white} Andreas Neacsu, Adam Cobb, Kevin Ellis, and Devon Bryce}
+\end{textblock}
+
+% ==============================================================
+% COLUMN 1  (x = 0.02, width = 0.295)
+% ==============================================================
+
+% -- Value Proposition --
+\begin{textblock}{0.295}(0.02, 0.17)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Value Proposition}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+    No lightweight solution combines certificate-based authentication, fine-grained access control, and zero-config discovery in one device.\par}
+\end{textblock}
+
+% -- Objective --
+\begin{textblock}{0.295}(0.02, 0.271)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Objective}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+    Build a portable Raspberry Pi file server with mTLS authentication, flexible permissions, and mDNS discovery. Deployable anywhere without cloud infrastructure or client software beyond a browser.\par}
+\end{textblock}
+
+% -- Problem Definition --
+\begin{textblock}{0.295}(0.02, 0.39)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Problem Definition}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+    There is no lightweight, portable and secure file sharing solution that provides multi-user access without external dependencies.\par}
+\end{textblock}
+
+% -- guest image --
+\begin{textblock}{0.295}(0.02, 0.5)
+  \includegraphics[width=\linewidth]{guest.png}
+\end{textblock}
+\begin{textblock}{0.295}(0.02, 0.74)
+  {\fontsize{24}{30}\selectfont\itshape\color{black} Users can browse shared files
+  directly in the browser after installing their client certificate.\par}
+\end{textblock}
+
+\begin{textblock}{0.295}(0.02, 0.778)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Key Requirements}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+  \begin{itemize}\setlength{\itemsep}{6pt}
+    \item Clients must authenticate with mTLS
+    \item Full certificate lifecycle managed on-device
+    \item Flexible access control
+    \item mDNS for zero-config discovery
+    \item Fully auditable self contained system.
+  \end{itemize}}
+\end{textblock}
+
+
+\begin{textblock}{0.03}(0.91, 0.1547)
+  \includegraphics[width=\linewidth]{9.PNG}
+\end{textblock}
+\begin{textblock}{0.03}(0.94, 0.1547)
+  \includegraphics[width=\linewidth]{11.PNG}
+\end{textblock}
+\begin{textblock}{0.03}(0.97, 0.1547)
+  \includegraphics[width=\linewidth]{12.PNG}
+\end{textblock}\begin{textblock}{0.06}(0.125, 0.915)
+  \includegraphics[width=\linewidth]{qr-code.png}
+\end{textblock}
+% ==============================================================
+% COLUMN 2  (x = 0.352, width = 0.29)
+% ==============================================================
+
+\begin{textblock}{0.31}(0.352, 0.17)
+  \includegraphics[width=\linewidth]{../diagrams/png/11-sys-arch-slim.png}
+\end{textblock}
+\begin{textblock}{0.31}(0.352, 0.17)
+  \vspace{3pt}\hfill\pillhead{System Architecture}
+\end{textblock}
+
+\begin{textblock}{0.31}(0.352, 0.51)
+  \includegraphics[width=\linewidth]{../diagrams/png/03-rbac.png}
+\end{textblock}
+\begin{textblock}{0.10}(0.352, 0.54)
+  \vspace{3pt}\pillhead{RBAC}
+\end{textblock}
+
+% -- Concept Development --
+\begin{textblock}{0.31}(0.352, 0.80)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Concept Development}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+Two prior designs were evaluated: an SMB-over-mTLS approach requiring client-side Docker, and a QR code JWT approach lacking mutual TLS and per-user access control. The final design resolves both by delegating mTLS verification to Nginx, requiring only a browser with an installed certificate.\par}
+\end{textblock}
+
+% ==============================================================
+% COLUMN 3  (x = 0.684, width = 0.29)
+% ==============================================================
+
+% \begin{textblock}{0.29}(0.684, 0.2)
+%   \pillhead{Certificate Revocation}\vspace{3pt}\par
+%   \includegraphics[width=\linewidth]{../diagrams/png/09-certificate-revocation.png}
+% \end{textblock}
+
+% \begin{textblock}{0.29}(0.684, 0.54)
+%   \pillhead{Audit Logging}\vspace{3pt}\par
+%   \includegraphics[width=\linewidth]{../diagrams/png/10-audit-logging.png}
+% \end{textblock}
+
+% -- Validation --
+\begin{textblock}{0.29}(0.684, 0.17)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Validation}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+  \begin{itemize}\setlength{\itemsep}{6pt}
+    \item 105 backend unit tests: auth, permissions, certificate lifecycle, path traversal
+    \item Frontend enforced via ESLint, TypeScript strict mode, and Vite builds
+    \item Three-workflow GitHub Actions CI: lint, type-check, tests, and Docker builds on every push
+  \end{itemize}}
+\end{textblock}
+
+% -- sys-log image --
+\begin{textblock}{0.29}(0.684, 0.373)
+  \includegraphics[width=\linewidth]{sys-log.png}
+\end{textblock}
+\begin{textblock}{0.29}(0.684, 0.61)
+  {\fontsize{24}{30}\selectfont\itshape\color{black} The real-time audit log captures every
+  security-relevant action with timestamp, user, and outcome for auditability.\par}
+\end{textblock}
+
+% -- Conclusion --
+\begin{textblock}{0.29}(0.684, 0.65)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Conclusion}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+    TerraCrate delivers a secure, portable, self-hosted file sharing system with no cloud
+    dependencies. mTLS verification delegated to Nginx provides cryptographic mutual
+    authentication requiring only a browser. The three-tier permissions, certificate
+    lifecycle, mDNS discovery, and audit logging satisfy all core requirements.\par}
+\end{textblock}
+
+% -- Acknowledgements --
+\begin{textblock}{0.29}(0.684, 0.845)
+  \setlength{\baselineskip}{28pt}\setlength{\parskip}{6pt}%
+  \pillhead{Acknowledgements}\vspace{18pt}\par
+  {\fontsize{28}{36}\selectfont\setlength{\baselineskip}{38pt}%
+    The team would like to thank Dr.\ Constantinos Kolias for proposing the project and providing guidance
+    throughout the design process, and Dr.\ Terrance Soule for his support and guidance.\par}
+\end{textblock}
+
+\end{frame}
+\end{document}
