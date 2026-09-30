@@ -71,7 +71,7 @@
     "@tailwindcss/vite": "4.2.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "4.7.0",
+    "@vitejs/plugin-react": "6.1.1",
     "eslint": "^10.0.3",
     "eslint-plugin-react-hooks": "^7.1.0-canary-e0cc7202-20260227",
     "tailwindcss": "4.2.1",
