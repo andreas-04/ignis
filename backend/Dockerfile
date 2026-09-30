@@ -16,7 +16,7 @@ COPY gen/ ./gen/
 
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /terracrate-server ./cmd/server
 
-FROM alpine:3.21
+FROM alpine:3.24
 
 # CA roots for outbound SMTP TLS; wget (busybox) for the healthcheck.
 RUN apk add --no-cache ca-certificates tzdata
