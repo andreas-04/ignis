@@ -2,7 +2,7 @@
 # The API contract is generated from proto/terracrate/v1 (see backend/gen,
 # committed) so the image build needs only the Go toolchain.
 
-FROM golang:1.26.4-alpine AS builder
+FROM golang:1.27.1-alpine AS builder
 
 WORKDIR /src
 
